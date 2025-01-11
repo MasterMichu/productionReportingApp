@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Production_reporting_app.Views.Dashboard"
+             Title="Dashboard"
+             x:Name="dashboard"
+             NavigatedTo="ContentPage_NavigatedTo"
+             NavigatedFrom="ContentPage_NavigatedFrom"
+             xmlns:viewmodels="clr-namespace:Production_reporting_app.Models"
+        
+             >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="1460"/>
+            <ColumnDefinition Width="60"/>
+
+
+        </Grid.ColumnDefinitions>
+        <Label 
+            Text="Current stops for line 557"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" 
+            Grid.Row="0"
+            Grid.Column="1"/>
+        <CollectionView x:Name="DashboardStopsCollectionView"
+                        Grid.Row="1"
+                        Grid.Column="1">
+
+            <CollectionView.ItemTemplate >
+
+                <DataTemplate >
+
+                <StackLayout  BackgroundColor="Black">
+                    <Grid Margin="5,2.5,5,2.5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding SzczegulyPostoju}" FontSize="Medium" Grid.Column="0" BackgroundColor="{Binding SczegulyPostojuKolor}" />
+                            <Label Text="{Binding Maszyna}" FontSize="Small"  Grid.Column="1" BackgroundColor="LightGrey" />
+                            <Label Text="{Binding SkutekPostoju}" FontSize="Medium" Grid.Column="2" BackgroundColor="{Binding SkutekPostojuKolor}"  />
+                            <Label Text="{Binding PrzyczynaPostoju}" FontSize="Medium" Grid.Column="3" BackgroundColor="{Binding PrzyczynaPostojuKolor}" />
+                            <Label Text="{Binding CzasRozpoczeciaPostojustring}" FontSize="Medium" Grid.Column="4" BackgroundColor="LightGrey" />
+                            <Label Text="{Binding CzasZakonczeniaPostojustring}" FontSize="Medium" Grid.Column="5" BackgroundColor="LightGrey" />
+                            <Label Text="{Binding StrataProdukcji}" FontSize="Medium" Grid.Column="6" BackgroundColor="LightGrey" />
+                            <Button Text="Edit" Grid.Column="7" Command="{Binding Source={x:Reference dashboard}, Path=EditCommand}"  CommandParameter="{Binding .}" />
+                        </Grid>
+                    </StackLayout>
+                </DataTemplate>
+                
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+    </Grid>
+</ContentPage>

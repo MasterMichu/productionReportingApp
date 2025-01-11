@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Production_reporting_app.Views.EditPopup"
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             
+             >
+    <Grid BackgroundColor="Gray"  HeightRequest="500" WidthRequest="850
+          " HorizontalOptions="CenterAndExpand" Padding="30" ColumnSpacing="4" RowSpacing="4" Opacity="0.9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.2*"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="0.3*" />
+        </Grid.ColumnDefinitions>
+        <VerticalStackLayout 
+            Grid.RowSpan="2" 
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BackgroundColor="Grey">
+            <Label 
+            Text="Szczegóły postoju"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            FontSize="Medium"
+            FontAttributes="Bold"/>
+            <Label 
+            Text="{Binding SzczegulyPostoju}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            FontSize="Small"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout 
+            Grid.Row="0"
+            Grid.Column="2" 
+            Grid.RowSpan="2" 
+            BackgroundColor="Grey">
+            <Label 
+            Text="Maszyna"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            Grid.Row="0"
+            Grid.Column="2"
+            FontSize="Medium"
+            FontAttributes="Bold"/>
+            <Label 
+            Text="{Binding Maszyna}"
+            VerticalOptions="Center" 
+            HorizontalTextAlignment="Center"
+            Grid.Row="1"
+            Grid.Column="2"
+            FontSize="Small"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout 
+            Grid.Row="2"
+            Grid.Column="0" 
+            Grid.RowSpan="2" 
+            BackgroundColor="Grey">
+            <Label 
+            Text="Przyczyna Postoju"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            FontSize="Medium"
+            FontAttributes="Bold"/>
+            <Label 
+            Text="{Binding PrzyczynaPostoju}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            FontSize="Small"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout 
+            Grid.Row="2"
+            Grid.Column="1" 
+            Grid.RowSpan="2" 
+            BackgroundColor="Grey">
+            <Label 
+            Text="Skutek Postoju"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            FontSize="Medium"
+            FontAttributes="Bold"/>
+            <Label 
+            Text="{Binding SkutekPostoju}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            FontSize="Small"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout 
+            Grid.Row="2"
+            Grid.Column="2" 
+            Grid.RowSpan="3" 
+            BackgroundColor="Grey">
+            <Label 
+            Text="Szacowana strata w minutach" 
+            HorizontalOptions="Center"
+            Grid.Row="2"
+            Grid.Column="2"
+            Grid.RowSpan="2"
+            FontSize="Medium"
+            FontAttributes="Bold"
+            VerticalOptions="StartAndExpand"/>
+            <Entry  
+            Text="{Binding StrataProdukcji}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            Grid.Row="4"
+            Grid.Column="2"
+            FontSize="Small"
+            MinimumWidthRequest="200"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout 
+            Grid.Row="4"
+            Grid.Column="0" 
+            Grid.RowSpan="3" 
+            BackgroundColor="Grey">
+            <Label 
+            Text="Start Postoju"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            FontSize="Medium"
+            FontAttributes="Bold"/>
+            <DatePicker 
+                    x:Name="dataRozpoczeciaPicker"
+                    DateSelected="dataRozpoczeciaPicker_DateSelected"
+                    HorizontalOptions="Center"/>
+            <TimePicker 
+                    x:Name="czasRozpoczeciaPicker"
+                     TimeSelected="czasRozpoczeciaPicker_TimeSelected"
+                    Format="MM:HH"
+                    HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout 
+            Grid.Row="4"
+            Grid.Column="1" 
+            Grid.RowSpan="3" 
+            BackgroundColor="Grey">
+            <Label Text="Koniec"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Center"
+                   FontSize="Medium"
+                   FontAttributes="Bold"
+                   x:Name="labelKoniec"/>
+            <DatePicker x:Name="dataZakonczeniaPicker"
+                        DateSelected="dataZakonczeniaPicker_DateSelected"
+                        HorizontalOptions="Center"/>
+            <TimePicker 
+                    x:Name="czasZakonczeniaPicker"
+                    Format="MM:HH"
+                    TimeSelected="czasZakonczeniaPicker_TimeSelected"
+                    HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+        <ImageButton  Grid.Row="7"
+                      Grid.Column="0"
+                      Source="binicon.png" 
+                      MaximumHeightRequest="50"
+                      Clicked="DeleteIcon_Clicked"/>
+        <ImageButton  Grid.Row="7"
+                      Grid.Column="1"
+                      Source="tickicon.png" 
+                      MaximumHeightRequest="50"
+                      Clicked="saveButton_Clicked"/>
+        <ImageButton  Grid.Row="7"
+                      Grid.Column="2"
+                      Source="exiticon.png" 
+                      MaximumHeightRequest="50" 
+                      Clicked="ExitButton_Clicked_1"/>
+    </Grid>
+    
+</mct:Popup>

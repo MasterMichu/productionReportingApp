@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Production_reporting_app</name>
+    </assembly>
+    <members>
+        <member name="M:Production_reporting_app.Views.AddStop.Entry_TextChanged(System.Object,Microsoft.Maui.Controls.TextChangedEventArgs)">
+            <summary>
+            przy zmianie wartosci entry w kategorii maszyna uruchamia filtrowanie
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Production_reporting_app.Views.AddStop.FilterCollectionOfItems(System.String,System.String)">
+            <summary>
+            funkcaj przyjmuje argumenty jest i było dla filtrowania listy maszyn na podstawie wpisu w entry
+            </summary>
+            <param name="input"> jest, bylo </param>
+            <param name="previousinput"> void </param>
+        </member>
+        <member name="T:Production_reporting_app.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+    </members>
+</doc>
