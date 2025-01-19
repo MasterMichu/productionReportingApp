@@ -1,106 +1,52 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Views;
 using Production_reporting_app.Models;
+using static Production_reporting_app.Models.ProductionLinesCollection;
+using static Production_reporting_app.Models.ProductionMachinesCollection;
+using static Production_reporting_app.Models.StopTypeCollection;
+using static Production_reporting_app.Models.MachinesBreakdownsCollection;
+using static Production_reporting_app.Models.StopResultCollection;
 
 namespace Production_reporting_app.Views;
 
 public partial class AddStop : ContentPage
 {
-    ObservableCollection<linia> itemsbasecollection=new ObservableCollection<linia>();
-    ObservableCollection<linia> items = new ObservableCollection<linia>();
-    ObservableCollection<machinesInLine> MachinesListBase = new ObservableCollection<machinesInLine>();
-    ObservableCollection<machinesInLine> Machineslist = new ObservableCollection<machinesInLine>();
-    ObservableCollection<Categories> kategoriePostojow = new ObservableCollection<Categories>();
-    ObservableCollection<MachinesBreakdowns> MachinesBreakdownscollection = new ObservableCollection<MachinesBreakdowns>();
-    ObservableCollection<MachinesBreakdowns> MachinesBreakdownsBaseCollection = new ObservableCollection<MachinesBreakdowns>();
-    List<StopResult> stopresults = new List<StopResult>();
+    ObservableCollection<ProductionLines> Linesbasecollection=new ObservableCollection<ProductionLines>();
+    ObservableCollection<ProductionLines> Lines = new ObservableCollection<ProductionLines>();
+    ObservableCollection<ProductionMachines> MachinesBaseCollection = new ObservableCollection<ProductionMachines>();
+    ObservableCollection<ProductionMachines> MachinesCollection = new ObservableCollection<ProductionMachines>();
+    ObservableCollection<StopsType> kategoriePostojow = new ObservableCollection<StopsType>();
+    ObservableCollection<MachinesBreakdown> MachinesBreakdownscollection = new ObservableCollection<MachinesBreakdown>();
+    ObservableCollection<MachinesBreakdown> MachinesBreakdownsBaseCollection = new ObservableCollection<MachinesBreakdown>();
+    List<StopsResult> stopresults = new List<StopsResult>();
     private string breakdownFilterValue="";
     private AllParamsToSaveBrakdown parametersToSave;
     private LoadingPopup loading;
+    private bool _staticDataLoaded=false;
 
     public AddStop() 
     {
         InitializeComponent();
-        linia linia1 = new linia { Nazwa = "567" };
-        linia linia2 = new linia { Nazwa = "568" };
-        linia linia3 = new linia { Nazwa = "569" };
-        linia linia4 = new linia { Nazwa = "560" };
-        linia linia5 = new linia { Nazwa = "571" };
-        linia linia6 = new linia { Nazwa = "572" };
-        linia linia7 = new linia { Nazwa = "576" };
-        linia linia8 = new linia { Nazwa = "590" };
-        linia linia9 = new linia { Nazwa = "591" };
-        linia linia10 = new linia { Nazwa = "592" };
-        StopResult stopresult1 = new StopResult { name = "postój linii" };
-        StopResult stopresult2 = new StopResult { name = "problemy z jakoscia" };
-        StopResult stopresult3 = new StopResult { name = "mikroprzestoje" };
-        StopResult stopresult4 = new StopResult { name = "spowolnienie linii" };
-        stopresults.Add(stopresult1);
-        stopresults.Add(stopresult2);
-        stopresults.Add(stopresult3);
-        stopresults.Add(stopresult4);
-
-        itemsbasecollection.Add(linia1);
-        itemsbasecollection.Add(linia2);
-        itemsbasecollection.Add(linia3);
-        itemsbasecollection.Add(linia4);
-        itemsbasecollection.Add(linia5);
-        itemsbasecollection.Add(linia6);
-        itemsbasecollection.Add(linia7);
-        itemsbasecollection.Add(linia8);
-        itemsbasecollection.Add(linia9);
-        itemsbasecollection.Add(linia10);
-        machinesInLine maszyna1= new machinesInLine {linia=linia1, Maszyna="gluwna maszyna test" };
-        machinesInLine maszyna2 = new machinesInLine { linia = linia2, Maszyna = "sprezarka" };
-        machinesInLine maszyna3 = new machinesInLine { linia = linia3, Maszyna = "etykieciarka" };
-        machinesInLine maszyna4 = new machinesInLine { linia = linia1, Maszyna = "nalewarka" };
-        machinesInLine maszyna5 = new machinesInLine { linia = linia3, Maszyna = "drukarka" };
-        machinesInLine maszyna6 = new machinesInLine { linia = linia2, Maszyna = "pralka" };
-        machinesInLine maszyna7 = new machinesInLine { linia = linia1, Maszyna = "kosiarka" };
-        machinesInLine maszyna8 = new machinesInLine { linia = linia3, Maszyna = "sralka" };
-        MachinesListBase.Add(maszyna1);
-        MachinesListBase.Add (maszyna2);
-        MachinesListBase.Add(maszyna3);
-        MachinesListBase.Add((maszyna4));
-        MachinesListBase.Add ((maszyna5));
-        MachinesListBase.Add(maszyna6);
-        MachinesListBase.Add(((maszyna7)));
-        MachinesListBase.Add(((maszyna8)));
         
-        Categories kategoria1 = new Categories { name = "awaria" };
-        Categories kategoria2 = new Categories { name = "regulacja" };
-        Categories kategoria3 = new Categories { name = "braki materialow" };
-        Categories kategoria4 = new Categories { name = "inne" };
-        kategoriePostojow.Add(kategoria1);
-        kategoriePostojow.Add(kategoria2 );
-        kategoriePostojow.Add(kategoria3);
-        kategoriePostojow.Add(kategoria4 );
-        MachinesBreakdowns breakdown1 = new MachinesBreakdowns { Machine = maszyna1, breakdowndetails = "awaria nalewarka", nazwakategorii=kategoria1 };
-        MachinesBreakdowns breakdown2 = new MachinesBreakdowns { Machine = maszyna1, breakdowndetails = "brak masy" ,nazwakategorii=kategoria3};
-        MachinesBreakdowns breakdown3 = new MachinesBreakdowns { Machine = maszyna1, breakdowndetails = "brak nalewaka", nazwakategorii=kategoria1 };
-        MachinesBreakdowns breakdown4 = new MachinesBreakdowns { Machine = maszyna1, breakdowndetails = "awaria separatora", nazwakategorii = kategoria1 };
-        MachinesBreakdowns breakdown5 = new MachinesBreakdowns { Machine = maszyna1, breakdowndetails = "ustawianie dozy", nazwakategorii = kategoria2 };
-        MachinesBreakdowns breakdown6 = new MachinesBreakdowns { Machine = maszyna1, breakdowndetails = "regulacja band", nazwakategorii = kategoria2 };
-        MachinesBreakdowns breakdown7 = new MachinesBreakdowns { Machine = maszyna1, breakdowndetails = "awaria elektryczna", nazwakategorii = kategoria1 };
-        MachinesBreakdowns breakdown8 = new MachinesBreakdowns { Machine = maszyna1, breakdowndetails = "awaria pneumatyki", nazwakategorii = kategoria1 };
-        MachinesBreakdownsBaseCollection.Add(breakdown1);
-        MachinesBreakdownsBaseCollection.Add(breakdown2);
-        MachinesBreakdownsBaseCollection.Add(breakdown3);
-        MachinesBreakdownsBaseCollection.Add(breakdown4);
-        MachinesBreakdownsBaseCollection.Add(breakdown5);
-        MachinesBreakdownsBaseCollection.Add(breakdown6);
-        MachinesBreakdownsBaseCollection.Add(breakdown7);
-        MachinesBreakdownsBaseCollection.Add(breakdown8);
+
         
-        populateItemscollection();
-        populatemachinescollection();
+     
+        
+        
+        
+       
 
+        
+        
+        
+        
+        
+        
 
-        podkategoriaMaszyny.ItemsSource = Machineslist;
-		podkategoria1.ItemsSource = items;
-        radiobuttonslistview.ItemsSource = kategoriePostojow;
-        szczegolypostoju.ItemsSource = MachinesBreakdownscollection;
-        stopResultCollectionView.ItemsSource = stopresults;
+        
+        //radiobuttonslistview.ItemsSource = kategoriePostojow;
+        
+        
         parametersToSave = new AllParamsToSaveBrakdown();
         loading = new LoadingPopup();
 
@@ -108,6 +54,41 @@ public partial class AddStop : ContentPage
         parametersToSave.savingStarted += new SavingStarted(ShowLoadingScreen);
         parametersToSave.savingEnded += new SavingEnded(closeLoadingScreen);
         parametersToSave.savingEnded += new SavingEnded(NavigateToDashboard);
+    }
+    public async Task  LoadAllDataForContentPage()
+    {
+        var linesFromApi = new ProductionLinesCollection();
+        var machinesFromApi = new ProductionMachinesCollection();
+        var stopsType=new StopTypeCollection();
+        var machinesBreakdownsFromApi = new MachinesBreakdownsCollection();
+        var stopsResultFromApi= new StopResultCollection();
+        stopresults = await stopsResultFromApi.GetCollection();
+        kategoriePostojow= await stopsType.GetCollection();
+        MachinesBaseCollection = await machinesFromApi.GetCollection();
+        Linesbasecollection = await linesFromApi.GetCollection();
+        MachinesBreakdownsBaseCollection = await machinesBreakdownsFromApi.GetCollection();
+        radiobuttonslistview.ItemsSource = kategoriePostojow;
+        podkategoriaMaszyny.ItemsSource = MachinesCollection;
+        podkategoria1.ItemsSource = Lines;
+        szczegolypostoju.ItemsSource = MachinesBreakdownscollection;
+        stopResultCollectionView.ItemsSource = stopresults;
+    }
+    protected override async void OnAppearing() 
+    { 
+        base.OnAppearing();
+        if (!_staticDataLoaded) 
+        { 
+            await InitializeAsync(); 
+        }
+        
+     
+    }
+    private async Task InitializeAsync() 
+    { 
+        await LoadAllDataForContentPage();
+        populateItemscollection();
+        populatemachinescollection();
+        _staticDataLoaded= true;
     }
 
     private async void NavigateToDashboard()
@@ -132,7 +113,7 @@ public partial class AddStop : ContentPage
 
     private void populatemachinesbreakdownscollection()
     {
-        foreach (MachinesBreakdowns breakdown in MachinesBreakdownsBaseCollection)
+        foreach (MachinesBreakdown breakdown in MachinesBreakdownsBaseCollection)
         {
             MachinesBreakdownscollection.Add(breakdown);
         }
@@ -140,23 +121,23 @@ public partial class AddStop : ContentPage
 
     private void populatemachinescollection()
     {
-        foreach (machinesInLine maszyna in MachinesListBase)
+        foreach (ProductionMachines maszyna in MachinesBaseCollection)
         { 
-        Machineslist.Add(maszyna);
+        MachinesCollection.Add(maszyna);
         }
     }
 
     private void populateItemscollection()
     {
-        foreach (linia item in itemsbasecollection)
+        foreach (ProductionLines item in Linesbasecollection)
         {
-        items.Add(item);
+        Lines.Add(item);
         }
     }
 
-    private void setwybranalinia(linia wybranalinia)
+    private void setwybranalinia(ProductionLines wybranalinia)
     {
-        parametersToSave.Linia = wybranalinia;
+        parametersToSave.LiniaID = wybranalinia.Id;
         filterMachinesChoice();
         podkategoriaMaszyny.IsVisible = true;
         filterBreakdowns();
@@ -165,24 +146,25 @@ public partial class AddStop : ContentPage
 
     private void filterMachinesChoice()
     {
-        Machineslist.Clear();
-        foreach (machinesInLine machine in MachinesListBase)
+        MachinesCollection.Clear();
+       
+        foreach (ProductionMachines machine in MachinesBaseCollection)
         {
-            if (machine.linia == parametersToSave.Linia)
+            if (machine.ProductionLineId == parametersToSave.LiniaID)
             {
-                Machineslist.Add(machine);
+                MachinesCollection.Add(machine);
             }
         }
     }
     private void filterBreakdowns()
     {
         MachinesBreakdownscollection.Clear();
-        if (parametersToSave.Maszyna!= null && parametersToSave.PrzyczynaPostoju!= null)
+        if (parametersToSave.MaszynaID!= 0 && parametersToSave.PrzyczynaPostojuID!= 0)
         {
             
-            foreach(MachinesBreakdowns breakdown in MachinesBreakdownsBaseCollection)
+            foreach(MachinesBreakdown breakdown in MachinesBreakdownsBaseCollection)
             {
-                if (breakdown.Machine == parametersToSave.Maszyna && breakdown.nazwakategorii == parametersToSave.PrzyczynaPostoju && breakdown.breakdowndetails.Contains(breakdownFilterValue))
+                if (breakdown.MaszynaId == parametersToSave.MaszynaID && breakdown.TypPostojuId == parametersToSave.PrzyczynaPostojuID && breakdown.SzczegulowyOpisPostoju.Contains(breakdownFilterValue))
                 { 
                 MachinesBreakdownscollection.Add(breakdown);                              
                 }
@@ -218,13 +200,13 @@ public partial class AddStop : ContentPage
         {
             if (input.Length > previousinput.Length)
             {
-                items.Clear();
-                foreach (linia item in itemsbasecollection)
+                Lines.Clear();
+                foreach (ProductionLines item in Linesbasecollection)
                 {
                     
-                    if (item.Nazwa.Contains(input))
+                    if (item.Name.Contains(input))
                     {
-                        items.Add(item);
+                        Lines.Add(item);
 
                     }
 
@@ -233,12 +215,12 @@ public partial class AddStop : ContentPage
             }
             else
             {
-                items.Clear();
-                foreach (linia item in itemsbasecollection)
+                Lines.Clear();
+                foreach (ProductionLines item in Linesbasecollection)
                 {
-                    if (item.Nazwa.Contains(input))
+                    if (item.Name.Contains(input))
                     {
-                        items.Add(item);
+                        Lines.Add(item);
 
                     }
 
@@ -248,12 +230,12 @@ public partial class AddStop : ContentPage
 
         }
         else {
-            items.Clear();
-            foreach (linia item in itemsbasecollection)
+            Lines.Clear();
+            foreach (ProductionLines item in Linesbasecollection)
             {   
-                if (item.Nazwa.Contains(input))
+                if (item.Name.Contains(input))
                 {
-                     items.Add(item);
+                     Lines.Add(item);
 
                 }
 
@@ -265,9 +247,11 @@ public partial class AddStop : ContentPage
 
     private void podkategoria1_ItemSelected_1(object sender, SelectedItemChangedEventArgs e)
     {
-        var wybrany = e.SelectedItem as linia;
+        var wybrany = e.SelectedItem as ProductionLines;
         setwybranalinia(wybrany);
         machineBreakdownsFilterEntryClear();
+        
+        
 
 
     }
@@ -275,10 +259,10 @@ public partial class AddStop : ContentPage
     private void RadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         var buttoninstance = sender as RadioButton;
-        var value = buttoninstance.Value as Categories;
+        var value = buttoninstance.Value as StopsType;
         if (e.Value)
         {
-            parametersToSave.PrzyczynaPostoju = value;
+            parametersToSave.PrzyczynaPostojuID = value.Id;
         
         
         
@@ -294,9 +278,10 @@ public partial class AddStop : ContentPage
         BreakdownFilterEntry.Text="";
     }
 
-    private void podkategoriaMaszyny_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private void podkategoriaMaszyny_ItemTapped(object sender, ItemTappedEventArgs e)
     {
-        parametersToSave.Maszyna = e.SelectedItem as machinesInLine;
+        var maszyna=e.Item as ProductionMachines;
+        parametersToSave.MaszynaID = maszyna.Id;
         filterBreakdowns();
         machineBreakdownsFilterEntryClear();
     }
@@ -312,10 +297,10 @@ public partial class AddStop : ContentPage
     private void RadioButton_CheckedChanged_1(object sender, CheckedChangedEventArgs e)
     {
         var buttoninstance = sender as RadioButton;
-        var value = buttoninstance.Value as StopResult;
+        var value = buttoninstance.Value as StopsResult;
         if (e.Value)
         {
-            parametersToSave.SkutekPostoju = value;
+            parametersToSave.SkutekPostojuID = value.Id;
 
 
 
@@ -325,7 +310,8 @@ public partial class AddStop : ContentPage
     
     private void szczegolypostoju_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        parametersToSave.SzczegulyPostoju = e.SelectedItem as MachinesBreakdowns;
+        var selecteditem=e.SelectedItem as MachinesBreakdown;
+        parametersToSave.SzczegulyPostojuID = selecteditem.Id; 
         
     }
 
@@ -394,4 +380,6 @@ public partial class AddStop : ContentPage
     {
         parametersToSave.saveParametersToFile();
     }
+
+   
 }

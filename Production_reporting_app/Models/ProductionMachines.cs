@@ -8,32 +8,33 @@ using System.Threading.Tasks;
 
 namespace Production_reporting_app.Models
 {
-    public class StopResultCollection
+    
+    public class ProductionMachinesCollection
     {
         private readonly HttpClient _httpClient;
 
-        public List<StopsResult> items { get; set; }
+        public ObservableCollection <ProductionMachines> items {  get; set; }
 
-        public StopResultCollection()
-        {
-            _httpClient = new HttpClient();
-            items = new List<StopsResult>();
-
+        public ProductionMachinesCollection()
+        { 
+            _httpClient=new HttpClient();
+            items= new ObservableCollection<ProductionMachines>();
+        
         }
 
-        public async Task<List<StopsResult>> GetCollection()
+        public async Task<ObservableCollection<ProductionMachines>> GetCollection()
         {
             await this.LoadData();
             return items;
-
-
+        
+        
         }
 
         private async Task LoadData()
         {
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<List<StopsResult>>("http://localhost:5000/api/problemresult");
+                var response = await _httpClient.GetFromJsonAsync<List<ProductionMachines>>("http://localhost:5000/api/productionmachine");
                 if (response != null)
                 {
                     foreach (var item in response)
@@ -47,14 +48,12 @@ namespace Production_reporting_app.Models
             }
         }
 
-
-
-        public class StopsResult
+        public class ProductionMachines 
         {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string ColorCode { get; set; }
+        public int Id {get; set;}
+        public string Name { get; set; }
+        public int ProductionLineId { get; set;}
         }
+
     }
 }
-

@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 
 
 
+
 namespace Production_reporting_app.Models
 {
     public class AllParamsToSaveBrakdown
     {
-        private linia _Linia;
-        private machinesInLine _Maszyna;
-        private Categories _PrzyczynaPostoju;
-        private StopResult _SkutekPostoju;
-        private MachinesBreakdowns _SzczegulyPostoju;
+        private int _LiniaID;
+        private int _MaszynaID;
+        private int _PrzyczynaPostojuID;
+        private int _SkutekPostojuID;
+        private int _SzczegulyPostojuID;
         private DateTime _dzienWystapieniaAwarii;
         private DateTime _dzienZakonczeniaAwarii;
         private TimeSpan _godzinaWystapieniaAwarii;
@@ -28,11 +29,11 @@ namespace Production_reporting_app.Models
   
         public AllParamsToSaveBrakdown() 
         {
-        _Linia=null;
-        _Maszyna = null;
-        _PrzyczynaPostoju = null;
-        _SkutekPostoju = null;
-        _SzczegulyPostoju = null;
+        _LiniaID=0;
+        _MaszynaID = 0;
+        _PrzyczynaPostojuID = 0;
+        _SkutekPostojuID = 0;
+        _SzczegulyPostojuID = 0;
         _dzienWystapieniaAwarii = DateTime.UnixEpoch;
         _dzienZakonczeniaAwarii = DateTime.UnixEpoch;
         _godzinaWystapieniaAwarii =TimeSpan.MaxValue;
@@ -44,59 +45,59 @@ namespace Production_reporting_app.Models
 
         }
         
-        public linia Linia
+        public int LiniaID
         {
-            get { return _Linia; }
+            get { return _LiniaID; }
             set {
-                _Maszyna = null;
-                _SzczegulyPostoju = null;
-                _Linia = value;
+                _MaszynaID = 0;
+                _SzczegulyPostojuID = 0;
+                _LiniaID = value;
                 CheckComletionOfParameters();
             }
         
         
         }
-        public machinesInLine Maszyna
+        public int MaszynaID
         {
-            get { return _Maszyna; }
+            get { return _MaszynaID; }
             set
             {
-                _SzczegulyPostoju = null;
-                _Maszyna = value;
+                _SzczegulyPostojuID = 0;
+                _MaszynaID = value;
                 CheckComletionOfParameters();
             }
 
 
         }
-        public Categories PrzyczynaPostoju
+        public int PrzyczynaPostojuID
         {
-            get { return _PrzyczynaPostoju; }
+            get { return _PrzyczynaPostojuID; }
             set
             {
-                _SzczegulyPostoju = null;
-                _PrzyczynaPostoju = value;
+                _SzczegulyPostojuID = 0;
+                _PrzyczynaPostojuID = value;
                 CheckComletionOfParameters();
             }
 
 
         }
-        public StopResult SkutekPostoju
+        public int SkutekPostojuID
         {
-            get { return _SkutekPostoju; }
+            get { return _SkutekPostojuID; }
             set
             {
-                _SkutekPostoju = value;
+                _SkutekPostojuID = value;
                 CheckComletionOfParameters();
             }
 
 
         }
-        public MachinesBreakdowns SzczegulyPostoju
+        public int SzczegulyPostojuID
         {
-            get { return _SzczegulyPostoju; }
+            get { return _SzczegulyPostojuID; }
             set
             {
-                _SzczegulyPostoju = value;
+                _SzczegulyPostojuID = value;
                 CheckComletionOfParameters();
             }
 
@@ -158,15 +159,13 @@ namespace Production_reporting_app.Models
         }
         private void CheckComletionOfParameters()
         {
-            if (Linia != null &&
-                Maszyna != null &&
-                PrzyczynaPostoju != null &&
-                SkutekPostoju != null &&
-                SzczegulyPostoju != null &&
+            if (LiniaID != 0 &&
+                MaszynaID != 0 &&
+                PrzyczynaPostojuID != 0 &&
+                SkutekPostojuID != 0 &&
+                SzczegulyPostojuID != null &&
                 dzienWystapieniaAwarii != DateTime.UnixEpoch &&
-                dzienZakonczeniaAwarii != DateTime.UnixEpoch &&
-                _godzinaWystapieniaAwariiUstawiona &&
-                _godzinaZakonczeniaAwariiUstawiona
+                _godzinaWystapieniaAwariiUstawiona
                 )
             { 
             ParamsAreComplete = true;
@@ -183,9 +182,9 @@ namespace Production_reporting_app.Models
         {
             savingStarted();
             DataToSaveJson DaneDoZapisu = new DataToSaveJson(this);
-            DaneDoZapisu.SaveData();
+            await DaneDoZapisu.SaveData();
             
-            await Task.Delay(2000);
+            
         savingEnded();
         
         
@@ -195,48 +194,51 @@ namespace Production_reporting_app.Models
 
         internal class DataToSaveJson
         {
-            public linia Linia;
-            public machinesInLine Maszyna;
-            public Categories PrzyczynaPostoju;
-            public StopResult SkutekPostoju;
-            public MachinesBreakdowns SzczegulyPostoju;
-            public bool CzyPostojZakonczony;
+
+            public int SzczegulyPostojuID;
+            public bool CzyZakonczony;
             public DateTime CzasRozpoczeciaPostoju;
             public DateTime CzasZakonczeniaPostoju;
-            public int CzasTrwania;
+            public int StrataProdukcji;
             internal DataToSaveJson(AllParamsToSaveBrakdown classobject)
             {
-                Linia = classobject.Linia;
-                Maszyna = classobject.Maszyna;
-                PrzyczynaPostoju = classobject.PrzyczynaPostoju;
-                SkutekPostoju = classobject.SkutekPostoju;
-                SzczegulyPostoju = classobject.SzczegulyPostoju;
-                if (classobject._godzinaWystapieniaAwariiUstawiona && classobject._godzinaZakonczeniaAwariiUstawiona)
+                
+                SzczegulyPostojuID = classobject.SzczegulyPostojuID;
+                if (classobject._godzinaZakonczeniaAwariiUstawiona && classobject.dzienZakonczeniaAwarii!=DateTime.UnixEpoch)
                 {
-                    CzyPostojZakonczony = true;
+                    CzasZakonczeniaPostoju = classobject.dzienZakonczeniaAwarii.AddTicks(classobject.godzinaZakonczeniaAwarii.Ticks);
+                    CzyZakonczony = true;
 
                 }
-                else { CzyPostojZakonczony = false; }
+                else 
+                { 
+                    CzyZakonczony = false; 
+                }
                 CzasRozpoczeciaPostoju = classobject.dzienWystapieniaAwarii.AddTicks(classobject.godzinaWystapieniaAwarii.Ticks);
-                CzasZakonczeniaPostoju = classobject.dzienZakonczeniaAwarii.AddTicks(classobject.godzinaZakonczeniaAwarii.Ticks);
-                CzasTrwania = classobject.StrataProdukcji;
+                
+                StrataProdukcji = classobject.StrataProdukcji;
 
             }
-            internal void SaveData()
+            internal async Task SaveData()
             {
                 var options = new JsonSerializerOptions
                 {
                     IncludeFields = true // Include private fields in the serialization
                 };
                 string JsonString=JsonSerializer.Serialize(this,options);
-                string path = "example.txt";
-
-                using (StreamWriter sw = new StreamWriter(path))
-                {
-
-                    sw.WriteLine(JsonString);
+                using var httpClient = new HttpClient();
+                var content = new StringContent(JsonString, System.Text.Encoding.UTF8, "application/json"); try
+                { 
+                    // Send the POST request
+                    var response = await httpClient.PostAsync("http://localhost:50000/api/reportedstopage", content); 
+                    // Ensure the request was successful
+                    response.EnsureSuccessStatusCode(); 
+                    Console.WriteLine("Data saved successfully."); 
+                } catch (Exception ex) 
+                { 
+                    // Handle exceptions
+                    Console.WriteLine($"Error: {ex.Message}"); }
                 }
-            }
         }
         public event ParametryKompletne paramsCompleteChanged;
         public event SavingStarted savingStarted;

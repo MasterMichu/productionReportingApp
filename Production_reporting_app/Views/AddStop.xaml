@@ -21,7 +21,7 @@
                 <CollectionView x:Name="stopResultCollectionView">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <RadioButton Content="{Binding name}" Value="{Binding .}" CheckedChanged="RadioButton_CheckedChanged_1"/>
+                            <RadioButton Content="{Binding Name}" Value="{Binding .}" CheckedChanged="RadioButton_CheckedChanged_1"/>
 
 
 
@@ -55,7 +55,7 @@
                     <ListView.ItemTemplate >
                         <DataTemplate>
                             <ViewCell>
-                                <Label Text="{Binding Nazwa}" 
+                                <Label Text="{Binding Name}" 
                                    HorizontalOptions="StartAndExpand"
                                    FontSize="Medium"/>
                             </ViewCell>
@@ -73,12 +73,12 @@
                 <ListView x:Name="podkategoriaMaszyny"  
                           WidthRequest="200" 
                           IsVisible="False"
-                          ItemSelected="podkategoriaMaszyny_ItemSelected"
+                          ItemTapped="podkategoriaMaszyny_ItemTapped"
                           HasUnevenRows="True">
                     <ListView.ItemTemplate >
                         <DataTemplate>
                             <ViewCell>
-                                <Label Text="{Binding Maszyna}" />
+                                <Label Text="{Binding Name}" />
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -94,7 +94,7 @@
                 <CollectionView x:Name="radiobuttonslistview">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <RadioButton Content="{Binding name} " 
+                            <RadioButton Content="{Binding Name} " 
                                          CheckedChanged="RadioButton_CheckedChanged" 
                                          Value="{Binding .}"/>
                         </DataTemplate>
@@ -119,7 +119,7 @@
                     <ListView.ItemTemplate >
                         <DataTemplate>
                             <ViewCell>
-                                <Label Text="{Binding breakdowndetails}"/>
+                                <Label Text="{Binding SzczegulowyOpisPostoju}"/>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
