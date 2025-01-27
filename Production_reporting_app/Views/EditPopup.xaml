@@ -169,7 +169,8 @@
                       Grid.Column="1"
                       Source="tickicon.png" 
                       MaximumHeightRequest="50"
-                      Clicked="saveButton_Clicked"/>
+                      Clicked="saveButton_Clicked"
+                      CommandParameter="{Binding .}"/>
         <ImageButton  Grid.Row="7"
                       Grid.Column="2"
                       Source="exiticon.png" 

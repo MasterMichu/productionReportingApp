@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,37 +10,61 @@ namespace Production_reporting_app.Models
 {
     public class ColorsLegend
     {
-        List<KoloryPrzypisanie> colors;
+        List<KoloryPrzypisanie> colors {  get; set; }
+        private readonly HttpClient _httpClient;
+       
         public ColorsLegend() 
         {
+            
+            _httpClient = new HttpClient();
             colors = new List<KoloryPrzypisanie>();
-            colors.Add(new KoloryPrzypisanie{kategoria="Awaria", color=Colors.Red });
-            colors.Add(new KoloryPrzypisanie { kategoria = "Regulacja", color = Colors.Blue });
-            colors.Add(new KoloryPrzypisanie { kategoria = "Problemy Jakościowe", color = Colors.LightBlue });
-            colors.Add(new KoloryPrzypisanie { kategoria = "Braki Materiałów", color = Colors.GreenYellow });
+            
+        }
+
+        
+
+        public async Task CreateLegend()
+        {
+            await LoadData();
+     
 
 
+        }
 
-            colors.Add(new KoloryPrzypisanie { kategoria = "Postój Linii", color = Colors.Red });
-            colors.Add(new KoloryPrzypisanie { kategoria = "Mikroprzestoje", color = Colors.LightBlue });
-            colors.Add(new KoloryPrzypisanie { kategoria = "Problemy z Jakością", color = Colors.GreenYellow });
-            colors.Add(new KoloryPrzypisanie { kategoria = "Spowolnienie Linii", color = Colors.Blue });
+        private async Task LoadData()
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<KoloryPrzypisanie>>("http://localhost:5000/api/stopagetype");
+                if (response != null)
+                {
+                    foreach (var item in response)
+                    { colors.Add(item); }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
 
-
-
-        internal class KoloryPrzypisanie
+        public class KoloryPrzypisanie
         {
-         internal string kategoria;
-           internal Color color;
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string ColorCode { get; set; }
         }
         public Color rozpoznajKategorie(string textdoRozpoznania)
         {
             foreach (KoloryPrzypisanie kolor in colors)
             {
-                if (textdoRozpoznania==kolor.kategoria)
-                {  return kolor.color; }
+                if (textdoRozpoznania==kolor.Name)
+                {
+                    
+                    return  Color.FromArgb(kolor.ColorCode); 
+                }
             
             
             }

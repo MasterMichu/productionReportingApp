@@ -197,8 +197,8 @@ namespace Production_reporting_app.Models
 
             public int SzczegulyPostojuID;
             public bool CzyZakonczony;
-            public DateTime CzasRozpoczeciaPostoju;
-            public DateTime CzasZakonczeniaPostoju;
+            public DateTime CzasRozpoczecia;
+            public DateTime CzasZakonczenia;
             public int StrataProdukcji;
             internal DataToSaveJson(AllParamsToSaveBrakdown classobject)
             {
@@ -206,7 +206,7 @@ namespace Production_reporting_app.Models
                 SzczegulyPostojuID = classobject.SzczegulyPostojuID;
                 if (classobject._godzinaZakonczeniaAwariiUstawiona && classobject.dzienZakonczeniaAwarii!=DateTime.UnixEpoch)
                 {
-                    CzasZakonczeniaPostoju = classobject.dzienZakonczeniaAwarii.AddTicks(classobject.godzinaZakonczeniaAwarii.Ticks);
+                    CzasZakonczenia = classobject.dzienZakonczeniaAwarii.AddTicks(classobject.godzinaZakonczeniaAwarii.Ticks);
                     CzyZakonczony = true;
 
                 }
@@ -214,7 +214,7 @@ namespace Production_reporting_app.Models
                 { 
                     CzyZakonczony = false; 
                 }
-                CzasRozpoczeciaPostoju = classobject.dzienWystapieniaAwarii.AddTicks(classobject.godzinaWystapieniaAwarii.Ticks);
+                CzasRozpoczecia = classobject.dzienWystapieniaAwarii.AddTicks(classobject.godzinaWystapieniaAwarii.Ticks);
                 
                 StrataProdukcji = classobject.StrataProdukcji;
 
@@ -223,21 +223,29 @@ namespace Production_reporting_app.Models
             {
                 var options = new JsonSerializerOptions
                 {
-                    IncludeFields = true // Include private fields in the serialization
+                    
+                    IncludeFields = true, // Include private fields in the serialization
+                    Converters = { 
+                        new CustomDateTimeConverter() 
+                    }
+
                 };
                 string JsonString=JsonSerializer.Serialize(this,options);
                 using var httpClient = new HttpClient();
-                var content = new StringContent(JsonString, System.Text.Encoding.UTF8, "application/json"); try
+                var content = new StringContent(JsonString, System.Text.Encoding.UTF8, "application/json"); 
+                try
                 { 
                     // Send the POST request
-                    var response = await httpClient.PostAsync("http://localhost:50000/api/reportedstopage", content); 
+                    var response = await httpClient.PostAsync("http://localhost:5000/api/reportedstopage", content); 
                     // Ensure the request was successful
                     response.EnsureSuccessStatusCode(); 
                     Console.WriteLine("Data saved successfully."); 
-                } catch (Exception ex) 
+                } 
+                catch (Exception ex) 
                 { 
                     // Handle exceptions
-                    Console.WriteLine($"Error: {ex.Message}"); }
+                    Console.WriteLine($"Error: {ex.Message}"); 
+                }
                 }
         }
         public event ParametryKompletne paramsCompleteChanged;

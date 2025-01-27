@@ -37,6 +37,10 @@ public partial class EditPopup :Popup
         }
         else 
         { ////dopisz dane z formularza do danych wyjsciowych
+            daneWyjsciowe.CzasRozpoczeciaPostoju = dataRozpoczeciaPicker.Date.AddTicks(czasRozpoczeciaPicker.Time.Ticks);
+            daneWyjsciowe.CzasZakonczeniaPostoju = dataZakonczeniaPicker.Date.AddTicks(czasZakonczeniaPicker.Time.Ticks);
+            daneWejsciowe.CzyPostojZakonczony = true;
+        
             DelegateContainer.RaiseOnClosePopupSendData(this.daneWyjsciowe);
         }
 
@@ -88,7 +92,8 @@ public partial class EditPopup :Popup
 
     private void dataRozpoczeciaPicker_DateSelected(object sender, DateChangedEventArgs e)
     {
-        this.dataZakonczeniaPicker.MinimumDate = e.NewDate;
+        //do dodania ograniczenie na picklerze
+        //this.dataZakonczeniaPicker.MinimumDate = e.NewDate;
 
 
     }
@@ -106,12 +111,14 @@ public partial class EditPopup :Popup
 
     private void saveButton_Clicked(object sender, EventArgs e)
     {
+        
         this.daneWejsciowe.editDelegate();
+        
     }
 
     private void DeleteIcon_Clicked(object sender, EventArgs e)
     {
-
+        DelegateContainer.RaiseOnClosePopupDeleteData(this.daneWyjsciowe);
     }
 
     private void ExitButton_Clicked_1(object sender, EventArgs e)

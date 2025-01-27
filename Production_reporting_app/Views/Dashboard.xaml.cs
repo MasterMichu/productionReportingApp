@@ -18,46 +18,56 @@ public partial class Dashboard : ContentPage
 
     public Dashboard()
     {
-        dane = new DataCollectionsForDashboardView();
-        dane.wczytajDaneZPliku();
+        
         loadingScreen=new LoadingPopup();
         InitializeComponent();
-        DaneWczytaneFlag = true;
         
-        DashboardStopsCollectionView.ItemsSource = dane.DaneDoWyswietleniaCollection;
+        
         DelegateContainer.OrderShowLoadingScreen += new DelegateContainer.ShowLoadingScreen(showLoadingScreen);
+        DelegateContainer.OrderCloseLoadingScreen += new DelegateContainer.CloseLoadingScreen(ReloadDataAfterUpdate);
         DelegateContainer.OrderCloseLoadingScreen += new DelegateContainer.CloseLoadingScreen(closeLoadingScreen);
-        //this.ShowPopup(editpopup);
-
-
-
-
-
-
+        DelegateContainer.OnClosePopupSendData += new DelegateContainer.ClosePopupSendData(UruchomLoadingPopupZapiszDane);
+        DelegateContainer.OnClosePopupDeleteData += new DelegateContainer.ClosePopupDeleteData(UruchomLoadingPopupUsunDane);
     }
-
+    protected override async void OnAppearing() 
+    {
+        await ContentPage_NavigatedToHandler();
+    }
     private void closeLoadingScreen()
     {
+        
         loadingScreen.Close();
+    }
+    private async void ReloadDataAfterUpdate()
+    {
+        DaneWczytaneFlag = false;
+        await ContentPage_NavigatedToHandler();
     }
 
     private void showLoadingScreen()
     {
         this.ShowPopup(loadingScreen);
     }
-
-    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    private async Task ContentPage_NavigatedToHandler()
     {
         if (!DaneWczytaneFlag)
         {
-            dane.wczytajDaneZPliku();
+            dane = new DataCollectionsForDashboardView();
+            DashboardStopsCollectionView.ItemsSource =await  dane.wczytajDaneZPliku();
             DaneWczytaneFlag = true;
         }
+
+    }
+
+    private async void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+       await ContentPage_NavigatedToHandler();
     }
 
     private void ContentPage_NavigatedFrom(object sender, NavigatedFromEventArgs e)
     {
         DaneWczytaneFlag = false;
+        dane.DaneDoWyswietleniaCollection.Clear();
     }
 
     private void EditButton_Clicked(DashboardData e)
@@ -70,7 +80,7 @@ public partial class Dashboard : ContentPage
     public void Edit(DashboardData daneDoEdycji)
     {
         editpopup = new EditPopup(daneDoEdycji);
-        DelegateContainer.OnClosePopupSendData += new DelegateContainer.ClosePopupSendData(UruchomLoadingPopupZapiszDane);
+        //DelegateContainer.OnClosePopupSendData += new DelegateContainer.ClosePopupSendData(UruchomLoadingPopupZapiszDane);
         this.ShowPopup(editpopup);
         
 
@@ -81,9 +91,20 @@ public partial class Dashboard : ContentPage
 
     private void UruchomLoadingPopupZapiszDane(DashboardData data)
     {
-        editpopup.Close();
-        data.saveData();
         
+        
+        
+        data.saveData();
+        editpopup.Close();
+
+    }
+    private void UruchomLoadingPopupUsunDane(DashboardData data)
+    {
+
+
+
+        data.deleteData();
+        editpopup.Close();
 
     }
 }
